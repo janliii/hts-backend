@@ -62,7 +62,7 @@ router.delete("/:id", (req, res) => {
 router.post('/chat', (req, res) => {
   const { body } = req;
 
-  handleMessage(body.message);
+  handleMessage(body);
       res.send("Message was sent successfully");
       client.end;
   });

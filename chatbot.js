@@ -8,10 +8,11 @@ const handleMessage = async message =>{
   try{
       const client = new Wit({accessToken});
       // Send the message to the AI
-      const response = await  client.message(message, {});
+      console.log( message)
+      const strmsg=message.input.toString()
+      const response = await  client.message(strmsg, {});
       // CHECK RESPONSE
       if(response) {
-      
           // return console.log(response);
           // HANDEL RESPONSE FUNCTION
           handleResponse(response);
