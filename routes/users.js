@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const client = require("../connection.js");
-const { handleMessage } = require("../chatbot.js")
+const { handleMessage } = require("../chatbot.js");
 
 /* GET users listing. */
 // router.get('/', function(req, res, next) {
@@ -59,12 +59,16 @@ router.delete("/:id", (req, res) => {
   client.end;
 });
 
-router.post('/chat', (req, res) => {
+//post message from the page
+router.post("/chat", (req, res) => {
   const { body } = req;
+  const resp = handleMessage(body);
+  console.log(resp);
+  console.log(handleMessage(body));
+  res.send("Message sent successfully");
+  // res.send(resp);
 
-  handleMessage(body);
-      res.send("Message was sent successfully");
-      client.end;
-  });
+  client.end;
+});
 
 module.exports = router;
