@@ -12,7 +12,7 @@ const handleMessage = async (message) => {
     const response = await client.message(message.input, {});
     // CHECK RESPONSE
     if (response) {
-      // return console.log(response);
+      // console.log(response);
       return handleResponse(response);
     }
   } catch (error) {
@@ -26,6 +26,7 @@ const handleMessage = async (message) => {
 const handleResponse = (response) => {
   let name = undefined;
   let confidence = 0;
+  let result = "";
   // Loop
   Array(response).forEach((r) => {
     if (r.intents.length > 0) {
@@ -33,18 +34,19 @@ const handleResponse = (response) => {
       confidence = r.intents[0].confidence;
 
       if (name === "greeting") {
-        handleHello(r);
+        result = handleHello(r);
       }
       if (name === "wit_location") {
-        handleLocation(r);
+        result = handleLocation(r);
       }
       if (name === "wit$get_time") {
-        handleTime(r);
+        result = handleTime(r);
       }
     } else {
-      handleGibberish(r);
+      result = handleGibberish(r);
     }
   });
+  return result;
 };
 
 // SWITCH
@@ -59,20 +61,20 @@ const handleResponse = (response) => {
 
 // HANDLE different functions
 const handleHello = () => {
-  console.log("Hello, can I help you?");
+  return "Hello, can I help you?";
 };
 // HANDLE GIBBERISH
 const handleGibberish = () => {
-  console.log("Sorry, I don't understand. Can you say that again?");
+  return "Sorry, I don't understand. Can you say that again?";
 };
 const handleLocation = (r) => {
   const location = r.entities["wit$location:location"][0].body;
-  console.log(`${location} is in `);
+  return `${location} is in `;
 };
 
 const handleTime = (r) => {
   const time = r.entities["wit$datetime:datetime"][0].value;
-  console.log(`It is ${time} now `);
+  return `It is ${time} now `;
 };
 
 module.exports = {

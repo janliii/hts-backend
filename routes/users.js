@@ -60,11 +60,10 @@ router.delete("/:id", (req, res) => {
 });
 
 //post message from the page
-router.post("/chat", (req, res) => {
+router.post("/chat", async (req, res) => {
   const { body } = req;
-  handleMessage(body);
-  console.log(handleMessage(body));
-  res.send("Message sent successfully");
+  const chatResp = await handleMessage(body);
+  res.send(chatResp);
   client.end;
 });
 
