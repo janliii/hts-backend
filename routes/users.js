@@ -33,8 +33,8 @@ client.connect();
 
 router.post("/", (req, res) => {
   const user = req.body;
-  let insertQuery = `insert into users(id, name) 
-                     values(${user.id}, '${user.name}')`;
+  let insertQuery = `insert into users(name,location, language_spoken) 
+                     values( '${user.name}','${user.location}','${user.language_spoken}')`;
 
   client.query(insertQuery, (err, result) => {
     if (!err) {
@@ -46,10 +46,27 @@ router.post("/", (req, res) => {
   client.end;
 });
 
-router.delete("/:id", (req, res) => {
-  let insertQuery = `delete from users where id=${req.params.id}`;
+//patch
+router.patch("/:id", (req, res) => {
+  const user = req.body;
+  let updateQuery = `UPDATE users
+	SET location = '${user.location}' WHERE id=${req.params.id}`;
 
-  client.query(insertQuery, (err, result) => {
+  client.query(updateQuery, (err, result) => {
+    if (!err) {
+      res.send("Update was successful");
+    } else {
+      console.log(err.message);
+    }
+  });
+  client.end;
+});
+
+//drop table
+router.delete("/:id", (req, res) => {
+  let deleteQuery = `delete from users where id=${req.params.id}`;
+
+  client.query(deleteQuery, (err, result) => {
     if (!err) {
       res.send("Deletion was successful");
     } else {
