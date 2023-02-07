@@ -42,8 +42,9 @@ app.use(function (err, req, res, next) {
   res.render("error");
 });
 
-app.listen(process.env.PORT || 3300, () => {
+const port = process.env.PORT || 3000;
+app.listen(port, "0,0,0,0", () => {
   console.log("Sever is now listening at port 3300");
 });
 // module.exports = app;
-app.get("/favicon.ico", (req, res) => res.status(204).end());
+// app.get("/favicon.ico", (req, res) => res.status(204).end());
