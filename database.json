@@ -1,0 +1,9 @@
+{
+    "dev": {
+      "driver": "pg",
+      "user": "postgres",
+      "password": "frankie1220",
+      "host": "localhost",
+      "database": "hit-the-spot"
+    }
+  }

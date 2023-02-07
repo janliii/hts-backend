@@ -5,7 +5,7 @@ const pool = new Pool({
   user: "postgres",
   port: 5432,
   password: "frankie1220",
-  database: "postgres",
+  database: "hit-the-spot",
 });
 
 module.exports = pool;
