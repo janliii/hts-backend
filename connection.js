@@ -12,6 +12,9 @@ const client = new Client({
 });
 client.connect();
 
+if (process.env.HEROKU_POSTGRESQL_TEAL_URL) {
+  pg.defaults.ssl = { rejectUnauthorized: false };
+}
 // pool.connect();
 
 // const pool = new Pool({
@@ -23,3 +26,19 @@ client.connect();
 // });
 
 module.exports = pool;
+
+// {
+//   pool,
+// client,
+// type: "postgres",
+// ssl:
+//   process.env.HEROKU_POSTGRESQL_TEAL_URL === "production"
+//     ? { rejectUnauthorized: false }
+//     : false,
+// url: process.env.DATABASE_URL,
+// entities: ["dist/entities/*.js"],
+// cli: {
+//   migrationsDir: "src/database/migrations",
+//   entitiesDir: "src/entities",
+// },
+// };
