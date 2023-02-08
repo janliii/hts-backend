@@ -1,24 +1,22 @@
 require("dotenv").config();
 
 const { Pool, Client } = require("pg");
+const pg = require("pg");
 // const DATABASE_URL =
 //   "postgresql://postgres:frankie1220@localhost:5432/hit-the-spot";
-const connectionString = process.env.HEROKU_POSTGRESQL_TEAL_URL;
+const connectionString = process.env.DATABASE_URL;
 const pool = new Pool({
   connectionString,
 });
 const client = new Client({
   connectionString,
-  ssl: {
-    rejectUnauthorized: false,
-  },
 });
 client.connect();
 
-// if (process.env.HEROKU_POSTGRESQL_TEAL_URL) {
-//   pg.defaults.ssl = { rejectUnauthorized: false };
-// }
-// pool.connect();
+if (process.env.HEROKU_POSTGRESQL_TEAL_URL) {
+  pg.defaults.ssl = { rejectUnauthorized: false };
+}
+pool.connect();
 
 // const pool = new Pool({
 //   host: "localhost",
