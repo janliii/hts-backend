@@ -9,12 +9,15 @@ const pool = new Pool({
 });
 const client = new Client({
   connectionString,
+  ssl: {
+    rejectUnauthorized: false,
+  },
 });
 client.connect();
 
-if (process.env.HEROKU_POSTGRESQL_TEAL_URL) {
-  pg.defaults.ssl = { rejectUnauthorized: false };
-}
+// if (process.env.HEROKU_POSTGRESQL_TEAL_URL) {
+//   pg.defaults.ssl = { rejectUnauthorized: false };
+// }
 // pool.connect();
 
 // const pool = new Pool({
