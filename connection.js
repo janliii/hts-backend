@@ -3,7 +3,7 @@ require("dotenv").config();
 const { Pool, Client } = require("pg");
 // const DATABASE_URL =
 //   "postgresql://postgres:frankie1220@localhost:5432/hit-the-spot";
-const connectionString = process.env.DATABASE_URL;
+const connectionString = process.env.HEROKU_POSTGRESQL_TEAL_URL;
 const pool = new Pool({
   connectionString,
 });
