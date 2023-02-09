@@ -42,7 +42,7 @@ app.use(function (err, req, res, next) {
   res.render("error");
 });
 
-const port = process.env.PORT || 80;
+const port = process.env.PORT || 3300;
 app.listen(port, () => {
   console.log("Sever is now listening at port 3300");
 });

@@ -42,6 +42,12 @@ const handleResponse = (response) => {
       if (name === "wit$get_time") {
         result = handleTime(r);
       }
+      if (name === "wit$get_date") {
+        result = handleDate(r);
+      }
+      if (name === "wit$get_weather") {
+        result = handleWeather(r);
+      }
     } else {
       result = handleGibberish(r);
     }
@@ -69,12 +75,21 @@ const handleGibberish = () => {
 };
 const handleLocation = (r) => {
   const location = r.entities["wit$location:location"][0].body;
-  return `${location} is in `;
+  const timezone =
+    r.entities["wit$location:location"][0].resolved["values"][0]["timezone"];
+  return `${location} is in ${timezone} timezone`;
 };
 
 const handleTime = (r) => {
   const time = r.entities["wit$datetime:datetime"][0].value;
-  return `It is ${time} now `;
+  return `It is ${time.slice(11, 16)} now `;
+};
+const handleDate = (r) => {
+  const time = r.entities["wit$datetime:datetime"][0].value;
+  return `Today is ${time.slice(0, 10)} `;
+};
+const handleWeather = (r) => {
+  return `It is raining now `;
 };
 
 module.exports = {
