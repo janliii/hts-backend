@@ -7,10 +7,10 @@ const connectionString = process.env.DATABASE_URL;
 //   "postgresql://postgres:frankie1220@localhost:5432/hit-the-spot";
 const pool = new Pool({
   connectionString,
-  ssl: {
-    // require: true,
-    rejectUnauthorized: false,
-  },
+  // ssl: {
+  //   // require: true,
+  //   rejectUnauthorized: false,
+  // },
 });
 
 module.exports = pool;
@@ -37,19 +37,3 @@ module.exports = pool;
 //   password: "frankie1220",
 //   database: "hit-the-spot",
 // });
-
-// {
-//   pool,
-// client,
-// type: "postgres",
-// ssl:
-//   process.env.HEROKU_POSTGRESQL_TEAL_URL === "production"
-//     ? { rejectUnauthorized: false }
-//     : false,
-// url: process.env.DATABASE_URL,
-// entities: ["dist/entities/*.js"],
-// cli: {
-//   migrationsDir: "src/database/migrations",
-//   entitiesDir: "src/entities",
-// },
-// };

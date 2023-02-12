@@ -8,10 +8,8 @@ const accessToken = process.env.WIT_AI_TOKEN;
 const handleMessage = async (message) => {
   try {
     const client = new Wit({ accessToken });
-    // Send the message to the AI
     console.log(message);
     const response = await client.message(message.input, {});
-    // CHECK RESPONSE
     if (response) {
       // console.log(response);
       return handleResponse(response);
@@ -20,8 +18,6 @@ const handleMessage = async (message) => {
     if (error) console.log(error);
   }
 };
-// Run message function
-// handleMessage('what time is it now');
 
 // HANDLE RESPONSE
 const handleResponse = (response) => {
@@ -49,6 +45,9 @@ const handleResponse = (response) => {
       if (name === "wit$get_weather") {
         result = handleWeather(r);
       }
+      if (name === "find_events") {
+        result = handleEvents(r);
+      }
     } else {
       result = handleGibberish(r);
     }
@@ -56,25 +55,16 @@ const handleResponse = (response) => {
   return result;
 };
 
-// SWITCH
-// switch(name){
-//     case 'hello':
-//         return console.log('Hello, can I help you?');
-//         // return handleHello();
-//     default:
-//         return console.log("Please don't forget good manners, say hello first!");
-//         // return handleGibberish();
-// }
-const searchWikipedia = async (searchQuery) => {
-  const endpoint = `https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=&format=json&origin=*&srlimit=20&srsearch=${searchQuery}`;
-  const response = await fetch(endpoint);
-  if (!response.ok) {
-    throw Error(response.statusText);
-  }
-  const json = await response.json();
-  console.log(json);
-  return json;
-};
+// const searchWikipedia = async (searchQuery) => {
+//   const endpoint = `https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=&format=json&origin=*&srlimit=20&srsearch=${searchQuery}`;
+//   const response = await fetch(endpoint);
+//   if (!response.ok) {
+//     throw Error(response.statusText);
+//   }
+//   const json = await response.json();
+//   console.log(json);
+//   return json;
+// };
 
 const getWeather = async (lat, lon) => {
   const endpoint = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${process.env.WEATHER_API}`;
@@ -88,24 +78,46 @@ const getWeather = async (lat, lon) => {
     // return response;
     return `It is ${weatherDes} in ${city}. The current temperature is ${currentTemp} degrees`;
   } catch (err) {
-    console.error("error in findweather!", err);
+    console.error("error in find weather!", err);
+  }
+};
+
+const getEvents = async (input) => {
+  const sdk = `https://api.yelp.com/v3/events?limit=3&sort_by=desc&sort_on=time_start&location=${input}`;
+  const YELP_API =
+    "Bearer B2Nzm_rXDYUwJUAMTSkgrSitTEVjlHcDlWnkAaugJ7TQ12L25ww8AaasvQsHf2CcviYsiDJ29NBg7_MJ7J4bl51A3crUaQuKDWFfcCtr5kWesxvoLkkYKJAVcQtQY3Yx";
+  try {
+    const response = await axios.get(sdk, {
+      headers: { Authorization: `${YELP_API}` },
+    });
+    const name = response.data.events[0]["name"];
+    const category = response.data.events[0]["category"];
+    const event_site = response.data.events[0]["tickets_url"];
+    console.log(response.data);
+    return `There is a ${category} event that's called: ${name}. You can go to ${event_site} for more information`;
+  } catch (err) {
+    console.error("error in find weather!", err);
   }
 };
 // HANDLE different functions
+
 const handleHello = () => {
-  return "Hello, can I help you?";
+  return "Hello! How can I help you today?";
 };
 const handleGibberish = () => {
   return "Sorry, I don't understand. Can you say that again?";
 };
 const handleLocation = (r) => {
-  const location = r.entities["wit$location:location"][0].body;
-  const timezone =
-    r.entities["wit$location:location"][0].resolved["values"][0]["timezone"];
-  // const wikiRes = searchWikipedia(location).then((json) => {
-  //   json;
-  // });
-  return `${location} is in ${timezone} timezone. `;
+  if (r.entities["wit$location:location"][0].body) {
+    const location = r.entities["wit$location:location"][0].body;
+    const timezone =
+      r.entities["wit$location:location"][0].resolved["values"][0]["timezone"];
+    // const wikiRes = searchWikipedia(location).then((json) => {
+    //   json;});
+    return `${location} is in ${timezone} timezone. `;
+  } else {
+    return `Please enter a valid location`;
+  }
 };
 
 const handleTime = (r) => {
@@ -130,7 +142,16 @@ const handleWeather = (r) => {
     return getWeather(lat, long);
     console.log(getWeather(lat, long));
   } else {
-    return `please specify your city. For example,say "what's the weather in my_city?" `;
+    return `Please specify a location. For example, say "what's the weather in my_city?" `;
+  }
+};
+
+const handleEvents = (r) => {
+  if (r.entities["wit$location:location"]) {
+    const location = r.entities["wit$location:location"][0].body;
+    return getEvents(location);
+  } else {
+    return `Please specify a location. For example, say "what's the weather in my_city?" `;
   }
 };
 
