@@ -78,25 +78,25 @@ const getWeather = async (lat, lon) => {
     // return response;
     return `It is ${weatherDes} in ${city}. The current temperature is ${currentTemp} degrees`;
   } catch (err) {
-    console.error("error in find weather!", err);
+    console.error("Error in finding weather!", err);
   }
 };
 
 const getEvents = async (input) => {
-  const sdk = `https://api.yelp.com/v3/events?limit=3&sort_by=desc&sort_on=time_start&location=${input}`;
+  const endpoint = `https://api.yelp.com/v3/events?limit=3&sort_by=desc&sort_on=time_start&location=${input}`;
   const YELP_API =
     "Bearer B2Nzm_rXDYUwJUAMTSkgrSitTEVjlHcDlWnkAaugJ7TQ12L25ww8AaasvQsHf2CcviYsiDJ29NBg7_MJ7J4bl51A3crUaQuKDWFfcCtr5kWesxvoLkkYKJAVcQtQY3Yx";
   try {
-    const response = await axios.get(sdk, {
+    const response = await axios.get(endpoint, {
       headers: { Authorization: `${YELP_API}` },
     });
     const name = response.data.events[0]["name"];
     const category = response.data.events[0]["category"];
     const event_site = response.data.events[0]["tickets_url"];
     console.log(response.data);
-    return `There is a ${category} event that's called: ${name}. You can go to ${event_site} for more information`;
+    return `There is a ${category} event called: ${name} in ${input}. You can go to ${event_site} for more information`;
   } catch (err) {
-    console.error("error in find weather!", err);
+    console.error("Error in finding events!", err);
   }
 };
 // HANDLE different functions
@@ -112,8 +112,7 @@ const handleLocation = (r) => {
     const location = r.entities["wit$location:location"][0].body;
     const timezone =
       r.entities["wit$location:location"][0].resolved["values"][0]["timezone"];
-    // const wikiRes = searchWikipedia(location).then((json) => {
-    //   json;});
+
     return `${location} is in ${timezone} timezone. `;
   } else {
     return `Please enter a valid location`;

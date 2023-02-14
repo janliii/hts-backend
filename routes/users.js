@@ -3,11 +3,6 @@ const router = express.Router();
 const client = require("../connection.js");
 const { handleMessage } = require("../chatbot.js");
 
-/* GET users listing. */
-// router.get('/', function(req, res, next) {
-//   res.send('respond with a resource');
-// });
-
 router.get("/", (req, res) => {
   client.query(`Select * from users`, (err, result) => {
     if (!err) {
