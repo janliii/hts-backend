@@ -84,8 +84,7 @@ const getWeather = async (lat, lon) => {
 
 const getEvents = async (input) => {
   const endpoint = `https://api.yelp.com/v3/events?limit=3&sort_by=desc&sort_on=time_start&location=${input}`;
-  const YELP_API =
-    "Bearer B2Nzm_rXDYUwJUAMTSkgrSitTEVjlHcDlWnkAaugJ7TQ12L25ww8AaasvQsHf2CcviYsiDJ29NBg7_MJ7J4bl51A3crUaQuKDWFfcCtr5kWesxvoLkkYKJAVcQtQY3Yx";
+  const YELP_API = process.env.YELP_API;
   try {
     const response = await axios.get(endpoint, {
       headers: { Authorization: `${YELP_API}` },
